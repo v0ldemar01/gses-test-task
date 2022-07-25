@@ -2,7 +2,7 @@ import { config } from 'dotenv';
 
 config();
 
-const { PORT, HOST } = process.env;
+const { PORT, HOST, CURRENCY_RATE_API_URL } = process.env;
 
 const ENV = {
   APP: {
@@ -11,6 +11,9 @@ const ENV = {
   },
   API: {
     V1_PREFIX: '/api/v1',
+  },
+  CURRENCY: {
+    CURRENCY_RATE_API_URL,
   },
 } as const;
 
