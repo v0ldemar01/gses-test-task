@@ -3,7 +3,7 @@ import { HttpError } from '../../exceptions/exceptions.js';
 import {
   ISubscribeUserRequestDto,
 } from '../../common/model-types/model-types.js';
-import { User as UserRepository } from '../../data/repositories.js';
+import { User as UserRepository } from '../../data/repositories/repositories.js';
 import {
   Email as EmailService,
   Currency as CurrencyService,
