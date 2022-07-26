@@ -2,18 +2,22 @@ import { config } from 'dotenv';
 
 config();
 
-const { PORT, HOST, CURRENCY_RATE_API_URL } = process.env;
+const { PORT, HOST, CURRENCY_RATE_API_URL, EMAIL_USERNAME, EMAIL_PASSWORD } = process.env;
 
 const ENV = {
   APP: {
     SERVER_PORT: Number(PORT),
-    SERVER_HOST: HOST as string,
+    SERVER_HOST: String(HOST),
   },
   API: {
     V1_PREFIX: '/api/v1',
   },
   CURRENCY: {
     CURRENCY_RATE_API_URL,
+  },
+  EMAIL: {
+    USERNAME: String(EMAIL_USERNAME),
+    PASSWORD: String(EMAIL_PASSWORD),
   },
 } as const;
 

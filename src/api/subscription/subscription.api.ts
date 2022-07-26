@@ -27,6 +27,16 @@ const initSubscriptionApi: FastifyPluginAsync<IInitSubscriptionApiOptions> = asy
       return rep.status(HttpCode.OK).send();
     },
   });
+
+  fastify.route({
+    method: HttpMethod.POST,
+    url: SubscriptionApiPath.SendEmails,
+    handler: async (_req, rep) => {
+      await subscriptionService.sendEmails();
+
+      return rep.status(HttpCode.OK).send();
+    },
+  });
 };
 
 export { initSubscriptionApi };

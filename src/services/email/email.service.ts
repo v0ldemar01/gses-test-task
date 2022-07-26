@@ -2,16 +2,19 @@ import nodemailer, { Transporter } from 'nodemailer';
 import Mail from 'nodemailer/lib/mailer';
 import SMTPTransport from 'nodemailer/lib/smtp-transport';
 
-export class EmailService {
-  private _transporter: Transporter<SMTPTransport.SentMessageInfo>;
+class Email {
+  #transporter: Transporter<SMTPTransport.SentMessageInfo>;
+  #sourceEmail: string;
 
   constructor(credentials: { username: string, password: string }) {
-    this._transporter = this._createTransporter(credentials);
+    this.#transporter = this._createTransporter(credentials);
+    this.#sourceEmail = credentials.username;
   }
 
   private _createTransporter(credentials: { username: string, password: string }): Transporter<SMTPTransport.SentMessageInfo> {
     return nodemailer.createTransport({
-      service: 'gmail',
+      host: 'mail.binary-studio.com',
+      port: 465,
       secure: true,
       auth: {
         user: credentials.username,
@@ -21,22 +24,22 @@ export class EmailService {
   }
 
   public sendCurrentBTCToUAHCurrencyEmail(
-    from: string,
-    to: string,
-    params: { rate: number },
+    params: { to: string, rate: number },
   ): Promise<SMTPTransport.SentMessageInfo> {
     const emailOptions = {
-      from,
-      to,
+      to: params.to,
+      from: this.#sourceEmail,
       subject: 'BTC to UAH currency subscription',
       text: `
-        <div>You have subcribed to receive currency BTC to UAH. Current rate is ${params.rate}</div>
+        You have subcribed to receive currency BTC to UAH. Current BTC rate is ${params.rate} UAH
       `,
     };
     return this._sendEmail(emailOptions);
   }
 
   private async _sendEmail(emailOptions: Mail.Options): Promise<SMTPTransport.SentMessageInfo> {
-    return this._transporter.sendMail(emailOptions);
+    return this.#transporter.sendMail(emailOptions);
   }
 }
+
+export { Email };
