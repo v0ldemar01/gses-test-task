@@ -4,16 +4,26 @@ import {
   ISubscribeUserRequestDto,
 } from '../../common/model-types/model-types.js';
 import { User as UserRepository } from '../../data/repositories.js';
+import {
+  Email as EmailService,
+  Currency as CurrencyService,
+} from '../../services/services.js';
 
 interface ISubscriptionServiceConstructor {
+  currencyService: CurrencyService;
   userRepository: UserRepository;
+  emailService: EmailService;
 }
 
 class Subscription {
+  #currencyService: CurrencyService;
   #userRepository: UserRepository;
+  #emailService: EmailService;
 
-  constructor({ userRepository }: ISubscriptionServiceConstructor) {
+  constructor({ userRepository, currencyService, emailService }: ISubscriptionServiceConstructor) {
+    this.#currencyService = currencyService;
     this.#userRepository = userRepository;
+    this.#emailService = emailService;
   }
 
   async subscribeUser({ email }: ISubscribeUserRequestDto): Promise<void> {
@@ -26,6 +36,17 @@ class Subscription {
     }
 
     await this.#userRepository.subscribe({ email });
+  }
+
+  async sendEmails(): Promise<void> {
+    const users = await this.#userRepository.getAll();
+    const receiverString = users.map(({ email }) => email).join(', ');
+    const getCurrentRate = await this.#currencyService.getBTCInUAH();
+
+    await this.#emailService.sendCurrentBTCToUAHCurrencyEmail({
+      to: receiverString,
+      rate: getCurrentRate,
+    });
   }
 }
 

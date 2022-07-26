@@ -20,9 +20,9 @@ class Currency {
     const result = await this.#http.load<IGetBTCInUAHFullResponseDto>(
       ENV.CURRENCY.CURRENCY_RATE_API_URL as string,
     );
-    const { price: { uah, btc } } = result.data[0];
+    const { price: { uah } } = result.data[0];
 
-    return { uah, btc };
+    return uah;
   }
 }
 

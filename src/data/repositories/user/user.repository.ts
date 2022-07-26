@@ -12,6 +12,10 @@ class User {
     this.#userCollection = userCollection;
   }
 
+  async getAll(): Promise<IUserDto[]> {
+    return new Promise((resolve) => resolve(this.#userCollection.slice()));
+  }
+
   async getById(id: string): Promise<IUserDto | null> {
     return this.getOne({ id });
   }
