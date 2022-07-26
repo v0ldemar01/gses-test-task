@@ -19,10 +19,10 @@ const initSubscriptionApi: FastifyPluginAsync<IInitSubscriptionApiOptions> = asy
     method: HttpMethod.POST,
     url: SubscriptionApiPath.Subscribe,
     schema: {
-      querystring: subscribeUserValidationSchema,
+      body: subscribeUserValidationSchema,
     },
-    handler: async (req: FastifyRequest<{ Querystring: ISubscribeUserRequestDto }>, rep) => {
-      await subscriptionService.subscribeUser({ email: req.query.email });
+    handler: async (req: FastifyRequest<{ Body: ISubscribeUserRequestDto }>, rep) => {
+      await subscriptionService.subscribeUser({ email: req.body.email });
 
       return rep.status(HttpCode.OK).send();
     },

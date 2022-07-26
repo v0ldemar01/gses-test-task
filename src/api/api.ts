@@ -1,6 +1,5 @@
 import { FastifyPluginAsync } from 'fastify';
 import { ValidationSchema } from '~/common/model-types/model-types.js';
-import { ApiPath } from '../common/enums/enums.js';
 import {
   Currency as CurrencyService,
   Subscription as SubscriptionService,
@@ -26,7 +25,6 @@ const initApi: FastifyPluginAsync<IInitApiOptions> = async (
     services: {
       currency,
     },
-    prefix: ApiPath.CURRENCY,
   });
 
   fastify.register(initSubscriptionApi, {

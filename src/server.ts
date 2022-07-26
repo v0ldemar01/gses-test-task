@@ -1,6 +1,8 @@
 /* eslint-disable no-console */
 import Fastify from 'fastify';
 import cors from '@fastify/cors';
+import formBody from '@fastify/formbody';
+import swagger, { StaticPathSpec } from '@fastify/swagger';
 import { ENV } from './common/enums/enums.js';
 import { initApi } from './api/api.js';
 import { initServices } from './services/services.js';
@@ -18,6 +20,8 @@ app.register(cors, {
   origin: '*',
 });
 
+app.register(formBody);
+
 const repositories = initDatabase();
 const { currency, subscription } = initServices(repositories);
 
@@ -27,6 +31,19 @@ app.register(initApi, {
     subscription,
   },
   prefix: ENV.API.V1_PREFIX,
+});
+
+app.register(swagger, {
+  routePrefix: ENV.API.DOCUMENTATION_PREFIX,
+  mode: 'static',
+  exposeRoute: true,
+  specification: ((): StaticPathSpec => {
+    const url = new URL('./documentation', import.meta.url).pathname.slice(1);
+    return {
+      path: `${url}/documentation.yaml`,
+      baseDir: url,
+    };
+  })(),
 });
 
 app.listen({ port: ENV.APP.SERVER_PORT, host: ENV.APP.SERVER_HOST });
