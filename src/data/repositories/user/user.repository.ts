@@ -1,4 +1,7 @@
-import { IUserDto } from '../../../common/model-types/model-types.js';
+import {
+  IUserDto,
+  ISubscribeUserDto,
+} from '../../../common/model-types/model-types.js';
 import { v4 } from 'uuid';
 
 interface IUserRepositoryConstructor {
@@ -34,7 +37,7 @@ class User {
     return new Promise((resolve) => resolve(user ?? null));
   }
 
-  async subscribe({ email }: IUserDto): Promise<IUserDto> {
+  async subscribe({ email }: ISubscribeUserDto): Promise<IUserDto> {
     const newUser = { id: v4(), email };
     this.#userCollection.push(newUser);
 
