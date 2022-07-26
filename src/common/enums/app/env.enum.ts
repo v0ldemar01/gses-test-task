@@ -11,6 +11,7 @@ const ENV = {
   },
   API: {
     V1_PREFIX: '/api/v1',
+    DOCUMENTATION_PREFIX: '/swagger',
   },
   CURRENCY: {
     CURRENCY_RATE_API_URL,
