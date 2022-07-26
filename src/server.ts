@@ -1,10 +1,10 @@
 /* eslint-disable no-console */
 import Fastify from 'fastify';
 import cors from '@fastify/cors';
-
 import { ENV } from './common/enums/enums.js';
 import { initApi } from './api/api.js';
 import { initServices } from './services/services.js';
+import { initDatabase } from './data/db.js';
 
 const app = Fastify({
   logger: {
@@ -18,10 +18,13 @@ app.register(cors, {
   origin: '*',
 });
 
-const { currency } = initServices();
+const repositories = initDatabase();
+const { currency, subscription } = initServices(repositories);
+
 app.register(initApi, {
   services: {
     currency,
+    subscription,
   },
   prefix: ENV.API.V1_PREFIX,
 });

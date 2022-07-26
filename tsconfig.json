@@ -12,6 +12,7 @@
       "target": "ESNext",
       "allowJs": true,
       "forceConsistentCasingInFileNames": true,
+      "allowSyntheticDefaultImports": true,
       "strict": true,
       "resolveJsonModule": true,
       "moduleResolution": "node",
