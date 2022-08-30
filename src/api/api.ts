@@ -1,4 +1,5 @@
 import { FastifyPluginAsync } from 'fastify';
+
 import { ValidationSchema } from '~/common/model-types/model-types.js';
 import {
   Currency as CurrencyService,
@@ -21,12 +22,12 @@ const initApi: FastifyPluginAsync<IInitApiOptions> = async (
   fastify.setValidatorCompiler<ValidationSchema>(({
     schema,
   }) => <T>(data: T): ReturnType<ValidationSchema['validate']> => schema.validate(data));
+
   fastify.register(initCurrencyApi, {
     services: {
       currency,
     },
   });
-
   fastify.register(initSubscriptionApi, {
     services: {
       subscription,

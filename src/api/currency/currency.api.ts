@@ -1,4 +1,5 @@
 import { FastifyPluginAsync } from 'fastify';
+
 import { HttpCode, HttpMethod, CurrencyApiPath } from '../../common/enums/enums.js';
 import { Currency as CurrencyService } from '../../services/services.js';
 

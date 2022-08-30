@@ -1,8 +1,9 @@
+import { v4 } from 'uuid';
+
 import {
   IUserDto,
   ISubscribeUserDto,
 } from '../../../common/model-types/model-types.js';
-import { v4 } from 'uuid';
 
 interface IUserRepositoryConstructor {
   userCollection: IUserDto[];
@@ -15,19 +16,19 @@ class User {
     this.#userCollection = userCollection;
   }
 
-  async getAll(): Promise<IUserDto[]> {
+  getAll(): Promise<IUserDto[]> {
     return new Promise((resolve) => resolve(this.#userCollection.slice()));
   }
 
-  async getById(id: string): Promise<IUserDto | null> {
+  getById(id: string): Promise<IUserDto | null> {
     return this.getOne({ id });
   }
 
-  async getOne(search: Partial<IUserDto>): Promise<IUserDto | null> {
+  getOne(search: Partial<IUserDto>): Promise<IUserDto | null> {
     return this.findOne(search);
   }
 
-  async findOne(search: Partial<IUserDto>): Promise<IUserDto | null> {
+  findOne(search: Partial<IUserDto>): Promise<IUserDto | null> {
     const user = this.#userCollection.find((user) => {
       return Object.entries(search).every(
         ([key, value]) => user[key as keyof IUserDto] === value,
@@ -39,9 +40,10 @@ class User {
 
   async subscribe({ email }: ISubscribeUserDto): Promise<IUserDto> {
     const newUser = { id: v4(), email };
+
     this.#userCollection.push(newUser);
 
-    return newUser;
+    return new Promise((resolve) => resolve(newUser));
   }
 }
 

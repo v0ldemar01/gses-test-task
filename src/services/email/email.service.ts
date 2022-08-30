@@ -1,26 +1,23 @@
+/* eslint-disable @typescript-eslint/no-empty-interface */
 import nodemailer, { Transporter } from 'nodemailer';
 import Mail from 'nodemailer/lib/mailer';
 import SMTPTransport from 'nodemailer/lib/smtp-transport';
 
+import { IEmailCredentials } from '../../common/model-types/email/email';
+import { getEmailTransportConfig } from '../../configs/email.config';
+
+interface IEmailServiceConstructor extends IEmailCredentials {}
+
 class Email {
   #transporter: Transporter<SMTPTransport.SentMessageInfo>;
-  #sourceEmail: string;
 
-  constructor(credentials: { username: string, password: string }) {
+  constructor(credentials: IEmailServiceConstructor) {
     this.#transporter = this._createTransporter(credentials);
     this.#sourceEmail = credentials.username;
   }
 
-  private _createTransporter(credentials: { username: string, password: string }): Transporter<SMTPTransport.SentMessageInfo> {
-    return nodemailer.createTransport({
-      host: 'mail.binary-studio.com',
-      port: 465,
-      secure: true,
-      auth: {
-        user: credentials.username,
-        pass: credentials.password,
-      },
-    });
+  private _createTransporter(credentials: IEmailCredentials): Transporter<SMTPTransport.SentMessageInfo> {
+    return nodemailer.createTransport(getEmailTransportConfig(credentials));
   }
 
   public sendCurrentBTCToUAHCurrencyEmail(

@@ -1,4 +1,5 @@
 import Joi from 'joi';
+
 import { UserValidationMessage } from '../../../common/enums/enums.js';
 import { ISubscribeUserDto } from '../../../common/model-types/model-types.js';
 

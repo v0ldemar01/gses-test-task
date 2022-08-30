@@ -1,4 +1,5 @@
 import { FastifyPluginAsync, FastifyRequest } from 'fastify';
+
 import { ISubscribeUserRequestDto } from '../../common/model-types/model-types.js';
 import { HttpCode, HttpMethod, SubscriptionApiPath } from '../../common/enums/enums.js';
 import {

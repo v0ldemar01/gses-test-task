@@ -28,6 +28,7 @@ class Subscription {
 
   async subscribeUser({ email }: ISubscribeUserRequestDto): Promise<void> {
     const existingUser = await this.#userRepository.getOne({ email });
+
     if (existingUser) {
       throw new HttpError({
         status: HttpCode.CONFLICT,
