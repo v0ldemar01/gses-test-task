@@ -1,7 +1,7 @@
 import Fastify, { FastifyInstance, FastifyServerOptions } from 'fastify';
+import swagger, { StaticPathSpec } from '@fastify/swagger';
 import cors from '@fastify/cors';
 import formBody from '@fastify/formbody';
-import swagger, { StaticPathSpec } from '@fastify/swagger';
 
 import { ENV } from './common/enums/enums.js';
 import { initApi } from './api/api.js';
