@@ -3,15 +3,15 @@
   "version": "1.0.0",
   "description": "Cryptocurrency rate wrapper service",
   "type": "module",
-  "main": "src/server.ts",
+  "main": "src/app.ts",
   "engines": {
     "node": ">=16 <17",
     "npm": ">=7 <9"
   },
   "scripts": {
     "lint:fs": "ls-lint",
-    "start:dev": "nodemon --exec ts-node -r tsconfig-paths/register ./src/server.ts",
-    "start": "node ./build/server.js",
+    "start:dev": "nodemon --exec ts-node -r tsconfig-paths/register ./src/app.ts",
+    "start": "node ./build/app.js",
     "lint:js": "npx eslint \"src/**/*.ts\"",
     "lint": "npm run lint:fs && npm run lint:js",
     "clean": "rimraf build",
