@@ -9,7 +9,7 @@ const subscribeUser = Joi.object<ISubscribeUserDto>({
     .email({ tlds: { allow: false } })
     .required()
     .messages({
-      'string.empty': UserValidationMessage.EMAIL_REQUIRED,
+      'any.required': UserValidationMessage.EMAIL_REQUIRED,
       'string.email': UserValidationMessage.EMAIL_INVALID,
     }),
 });

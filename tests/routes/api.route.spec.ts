@@ -28,7 +28,8 @@ describe('testing api endpoints', () => {
     it('should return 400 and correct message if body is empty', async () => {
       const response = await app.inject().post(
         `${ENV.API.V1_PREFIX}${SubscriptionApiPath.Subscribe}`,
-      );
+      )
+      .body({});
 
       expect(response.statusCode).toBe(HttpCode.BAD_REQUEST);
       expect(response.json().message).toBe(UserValidationMessage.EMAIL_REQUIRED);
