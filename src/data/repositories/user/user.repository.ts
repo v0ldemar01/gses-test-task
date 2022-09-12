@@ -4,20 +4,21 @@ import {
   IUserDto,
   ISubscribeUserDto,
 } from '../../../common/model-types/model-types.js';
+import { FileUserStorage } from '../file-user-storage/file-user-storage.js';
 
 interface IUserRepositoryConstructor {
-  userCollection: IUserDto[];
+  storage: FileUserStorage;
 }
 
 class User {
-  #userCollection: IUserDto[];
+  #storage: FileUserStorage;
 
-  constructor({ userCollection }: IUserRepositoryConstructor) {
-    this.#userCollection = userCollection;
+  constructor({ storage }: IUserRepositoryConstructor) {
+    this.#storage = storage;
   }
 
   getAll(): Promise<IUserDto[]> {
-    return new Promise((resolve) => resolve(this.#userCollection.slice()));
+    return this.#storage.getAll();
   }
 
   getById(id: string): Promise<IUserDto | null> {
@@ -28,22 +29,23 @@ class User {
     return this.findOne(search);
   }
 
-  findOne(search: Partial<IUserDto>): Promise<IUserDto | null> {
-    const user = this.#userCollection.find((user) => {
+  async findOne(search: Partial<IUserDto>): Promise<IUserDto | null> {
+    const users = await this.getAll();
+    const currentUser = users.find((user) => {
       return Object.entries(search).every(
         ([key, value]) => user[key as keyof IUserDto] === value,
       );
     });
 
-    return new Promise((resolve) => resolve(user ?? null));
+    return currentUser ?? null;
   }
 
   async subscribe({ email }: ISubscribeUserDto): Promise<IUserDto> {
     const newUser = { id: v4(), email };
 
-    this.#userCollection.push(newUser);
+    await this.#storage.writeOne(newUser);
 
-    return new Promise((resolve) => resolve(newUser));
+    return newUser;
   }
 }
 
