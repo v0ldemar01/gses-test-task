@@ -23,8 +23,15 @@ const initServices = (repositories: ReturnType<typeof initRepositories>): IInitS
   });
 
   const emailTransporter = new EmailTransporter({
-    username: ENV.EMAIL.USERNAME,
-    password: ENV.EMAIL.PASSWORD,
+    options: {
+      host: ENV.EMAIL.HOST,
+      port: ENV.EMAIL.PORT,
+      secure: ENV.EMAIL.SECURE,
+      auth: {
+        user: ENV.EMAIL.USERNAME,
+        pass: ENV.EMAIL.PASSWORD,
+      },
+    },
   });
 
   const email = new Email({

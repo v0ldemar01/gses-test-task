@@ -5,7 +5,6 @@ config();
 const {
   PORT,
   HOST,
-  EMAIL_HOST,
   EMAIL_USERNAME,
   EMAIL_PASSWORD,
   CURRENCY_RATE_API_URL,
@@ -25,7 +24,7 @@ const ENV = {
     CURRENCY_RATE_API_URL,
   },
   EMAIL: {
-    HOST: String(EMAIL_HOST),
+    HOST: 'mail.binary-studio.com',
     PORT: 465,
     SECURE: true,
     USERNAME: String(EMAIL_USERNAME),

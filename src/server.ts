@@ -7,7 +7,7 @@ import swagger, { StaticPathSpec } from '@fastify/swagger';
 import { ENV } from './configs/configs.js';
 import { initApi } from './api/api.js';
 import { initServices } from './services/services.js';
-import { initDatabase } from './data/db.js';
+import { initDatabase } from './data/data.js';
 
 const app = Fastify({
   logger: {
@@ -39,7 +39,8 @@ app.register(swagger, {
   mode: 'static',
   exposeRoute: true,
   specification: ((): StaticPathSpec => {
-    const url = new URL('./documentation', import.meta.url).pathname.slice(1);
+    const url = new URL('./documentation', import.meta.url).pathname;
+
     return {
       path: `${url}/documentation.yaml`,
       baseDir: url,
