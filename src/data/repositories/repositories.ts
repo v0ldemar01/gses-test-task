@@ -17,6 +17,7 @@ const initRepositories = (): IInitRepositoriesReturn => {
         path.dirname(
           fileURLToPath(import.meta.url),
         ),
+        '../../',
         ENV.APP.STORAGE,
       ),
     }),
