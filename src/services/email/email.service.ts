@@ -1,24 +1,21 @@
 /* eslint-disable @typescript-eslint/no-empty-interface */
-import nodemailer, { Transporter } from 'nodemailer';
 import Mail from 'nodemailer/lib/mailer';
 import SMTPTransport from 'nodemailer/lib/smtp-transport';
 
-import { IEmailCredentials } from '../../common/model-types/email/email.js';
-import { getEmailTransportConfig } from '../../configs/email.config.js';
+import { EmailTransporter } from '../email-transporter/email-transporter.service.js';
 
-interface IEmailServiceConstructor extends IEmailCredentials {}
+interface IEmailServiceConstructor {
+  emailTransporter: EmailTransporter;
+  sourceEmail: string;
+}
 
 class Email {
-  #transporter: Transporter<SMTPTransport.SentMessageInfo>;
+  #emailTransporter: EmailTransporter;
   #sourceEmail: string;
 
-  constructor(credentials: IEmailServiceConstructor) {
-    this.#transporter = this._createTransporter(credentials);
-    this.#sourceEmail = credentials.username;
-  }
-
-  private _createTransporter(credentials: IEmailCredentials): Transporter<SMTPTransport.SentMessageInfo> {
-    return nodemailer.createTransport(getEmailTransportConfig(credentials));
+  constructor({ emailTransporter, sourceEmail }: IEmailServiceConstructor) {
+    this.#emailTransporter = emailTransporter;
+    this.#sourceEmail = sourceEmail;
   }
 
   public sendCurrentBTCToUAHCurrencyEmail(
@@ -36,7 +33,7 @@ class Email {
   }
 
   private async _sendEmail(emailOptions: Mail.Options): Promise<SMTPTransport.SentMessageInfo> {
-    return this.#transporter.sendMail(emailOptions);
+    return this.#emailTransporter.transporter.sendMail(emailOptions);
   }
 }
 
