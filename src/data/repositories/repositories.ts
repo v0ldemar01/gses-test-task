@@ -1,14 +1,29 @@
-import { CollectionName } from '../../common/enums/enums.js';
-import { IDbCollection } from '../../common/model-types/model-types.js';
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
+
+import { ENV } from '../../configs/configs.js';
+import { FileUserStorage } from './file-user-storage/file-user-storage.js';
+import { FileStorage } from './file-storage/file-storage.repository.js';
 import { User } from './user/user.repository.js';
 
 interface IInitRepositoriesReturn {
   user: User;
 }
 
-const initRepositories = (db: IDbCollection): IInitRepositoriesReturn => {
+const initRepositories = (): IInitRepositoriesReturn => {
+  const fileUserStorage = new FileUserStorage({
+    storage: new FileStorage({
+      filePath: path.resolve(
+        path.dirname(
+          fileURLToPath(import.meta.url),
+        ),
+        '../../',
+        ENV.APP.STORAGE,
+      ),
+    }),
+  });
   const user = new User({
-    userCollection: db[CollectionName.USERS],
+    storage: fileUserStorage,
   });
 
   return { user };

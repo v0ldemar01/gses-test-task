@@ -1,9 +1,10 @@
-import { ENV } from '../common/enums/enums.js';
+import { ENV } from '../configs/env.config.js';
 import { Http } from './http/http.service.js';
+import { Email } from './email/email.service.js';
 import { Currency } from './currency/currency.service.js';
 import { Subscription } from './subscription/subscription.service.js';
 import { initRepositories } from '~/data/repositories/repositories.js';
-import { Email } from './email/email.service.js';
+import { EmailTransporter } from './email-transporter/email-transporter.service.js';
 
 interface IInitServicesReturn {
   http: Http;
@@ -21,9 +22,21 @@ const initServices = (repositories: ReturnType<typeof initRepositories>): IInitS
     http,
   });
 
+  const emailTransporter = new EmailTransporter({
+    options: {
+      host: ENV.EMAIL.HOST,
+      port: ENV.EMAIL.PORT,
+      secure: ENV.EMAIL.SECURE,
+      auth: {
+        user: ENV.EMAIL.USERNAME,
+        pass: ENV.EMAIL.PASSWORD,
+      },
+    },
+  });
+
   const email = new Email({
-    username: ENV.EMAIL.USERNAME,
-    password: ENV.EMAIL.PASSWORD,
+    emailTransporter,
+    sourceEmail: ENV.EMAIL.USERNAME,
   });
 
   const subscription = new Subscription({
