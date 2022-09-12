@@ -15,6 +15,7 @@ const ENV = {
   APP: {
     SERVER_PORT: Number(PORT),
     SERVER_HOST: String(HOST),
+    STORAGE: './data/storage.json',
   },
   API: {
     V1_PREFIX: '/api/v1',
