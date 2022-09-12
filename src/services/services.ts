@@ -1,4 +1,4 @@
-import { ENV } from '../common/enums/enums.js';
+import { ENV } from '../configs/env.config.js';
 import { Http } from './http/http.service.js';
 import { Currency } from './currency/currency.service.js';
 import { Subscription } from './subscription/subscription.service.js';

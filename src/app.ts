@@ -1,5 +1,6 @@
 /* eslint-disable no-console */
-import { ENV } from './common/enums/enums.js';
+
+import { ENV } from './configs/configs.js';
 import { buildServer } from './server.js';
 
 const app = buildServer({

@@ -3,7 +3,7 @@ import swagger, { StaticPathSpec } from '@fastify/swagger';
 import cors from '@fastify/cors';
 import formBody from '@fastify/formbody';
 
-import { ENV } from './common/enums/enums.js';
+import { ENV } from './configs/configs.js';
 import { initApi } from './api/api.js';
 import { initDatabase } from './data/db.js';
 import { initServices } from './services/services.js';
