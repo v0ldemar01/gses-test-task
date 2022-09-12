@@ -1,4 +1,3 @@
-export { ENV } from './app/app.js';
 export {
   SubscriptionApiPath,
   CurrencyApiPath,
