@@ -10,6 +10,7 @@ import {
 import {
   FileUserStorage,
 } from '../../../src/data/repositories/file-user-storage/file-user-storage.repository.js';
+import { IUserDto } from '../../../src/common/model-types/model-types.js';
 
 const filePath = resolve(
   dirname(
@@ -19,15 +20,18 @@ const filePath = resolve(
   ENV.APP.STORAGE,
 );
 
-const fileContent = { entities: [] };
+const fileContent = { users: [] };
 
 const fileStorage = new FileStorage({ filePath });
 const fileUserStorage = new FileUserStorage({ storage: fileStorage });
 
-describe('FileStorageRepository', () => {
+describe('FileUserStorageRepository', () => {
   const fsGetByKeyMock = jest
     .spyOn(fileStorage, 'getItemsByKey')
-    .mockImplementation(() => Promise.resolve(fileContent.entities));
+    .mockImplementation(() => Promise.resolve(fileContent.users));
+  const fsGetEntityByKeyAndSearchMock = jest
+    .spyOn(fileStorage, 'getEntityByKeyAndSearch')
+    .mockImplementation((_, user: Partial<IUserDto>) => Promise.resolve(user));
   const fsWriteByKeyMock = jest
     .spyOn(fileStorage, 'writeItemsByKey')
     .mockImplementation(() => Promise.resolve());
@@ -45,6 +49,17 @@ describe('FileStorageRepository', () => {
     expect(users).toEqual([]);
     expect(fsGetByKeyMock).toHaveBeenCalledTimes(1);
     expect(fsGetByKeyMock).toBeCalledWith(fileUserStorage.storageKey);
+  });
+
+  it('should return user by search', async () => {
+    const user = await fileUserStorage.getOne(fileContent.users[0]);
+
+    expect(user).toEqual(fileContent.users[0]);
+    expect(fsGetEntityByKeyAndSearchMock).toHaveBeenCalledTimes(1);
+    expect(fsGetEntityByKeyAndSearchMock).toBeCalledWith(
+      fileUserStorage.storageKey,
+      fileContent.users[0],
+    );
   });
 
   it('should write users into storage', async () => {
