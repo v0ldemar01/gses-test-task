@@ -1,4 +1,4 @@
-import { ExceptionMessage, HttpCode } from '../../common/enums/enums.js';
+import { ExceptionMessage } from '../../common/enums/enums.js';
 import { SubscriptionError } from '../../exceptions/exceptions.js';
 import {
   ISubscribeUserRequestDto,
@@ -31,7 +31,6 @@ class Subscription {
 
     if (existingUser) {
       throw new SubscriptionError({
-        status: HttpCode.CONFLICT,
         message: ExceptionMessage.USER_ALREADY_EXISTS,
       });
     }

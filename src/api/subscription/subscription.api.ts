@@ -23,9 +23,13 @@ const initSubscriptionApi: FastifyPluginAsync<IInitSubscriptionApiOptions> = asy
       body: subscribeUserValidationSchema,
     },
     handler: async (req: FastifyRequest<{ Body: ISubscribeUserRequestDto }>, rep) => {
-      await subscriptionService.subscribeUser({ email: req.body.email });
+      try {
+        await subscriptionService.subscribeUser({ email: req.body.email });
 
-      return rep.status(HttpCode.OK).send();
+        return rep.status(HttpCode.OK).send();
+      } catch (err) {
+        return rep.status(HttpCode.BAD_REQUEST).send(err);
+      }
     },
   });
 

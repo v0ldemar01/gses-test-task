@@ -1,16 +1,11 @@
-import { ExceptionMessage, ExceptionName, HttpCode } from '../../common/enums/enums.js';
-import { HttpError } from '../exceptions.js';
+import { ExceptionMessage, ExceptionName } from '../../common/enums/enums.js';
 
-class SubscriptionError extends HttpError {
+class SubscriptionError extends Error {
   public constructor({
     message = ExceptionMessage.USER_ALREADY_EXISTS,
-    status = HttpCode.BAD_REQUEST,
   } = {}) {
-    super({
-      message,
-      status,
-      name: ExceptionName.SUBSCRIPTION_ERROR,
-    });
+    super(message);
+    this.name = ExceptionName.SUBSCRIPTION_ERROR;
   }
 }
 
