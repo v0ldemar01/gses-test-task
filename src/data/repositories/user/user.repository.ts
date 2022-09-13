@@ -4,7 +4,7 @@ import {
   IUserDto,
   ISubscribeUserDto,
 } from '../../../common/model-types/model-types.js';
-import { FileUserStorage } from '../file-user-storage/file-user-storage.js';
+import { FileUserStorage } from '../file-user-storage/file-user-storage.repository.js';
 
 interface IUserRepositoryConstructor {
   storage: FileUserStorage;
@@ -31,7 +31,7 @@ class User {
 
   async findOne(search: Partial<IUserDto>): Promise<IUserDto | null> {
     const users = await this.getAll();
-    const currentUser = users.find((user) => {
+    const currentUser = (users ?? []).find((user) => {
       return Object.entries(search).every(
         ([key, value]) => user[key as keyof IUserDto] === value,
       );

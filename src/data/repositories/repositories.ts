@@ -2,7 +2,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 import { ENV } from '../../configs/configs.js';
-import { FileUserStorage } from './file-user-storage/file-user-storage.js';
+import { FileUserStorage } from './file-user-storage/file-user-storage.repository.js';
 import { FileStorage } from './file-storage/file-storage.repository.js';
 import { User } from './user/user.repository.js';
 
@@ -29,4 +29,4 @@ const initRepositories = (): IInitRepositoriesReturn => {
   return { user };
 };
 
-export { initRepositories, type User };
+export { initRepositories, type User, type FileStorage };

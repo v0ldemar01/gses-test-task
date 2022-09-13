@@ -17,20 +17,28 @@ class FileUserStorage {
     return this.#storage;
   }
 
+  get storageKey(): string {
+    return this.#storageKey;
+  }
+
   getAll(): Promise<IUserDto[]> {
-    return this.#storage.getByKey<IUserDto>(this.#storageKey);
+    return this.#storage.getItemsByKey<IUserDto>(this.#storageKey);
+  }
+
+  getOne<T>(search: Partial<T>): Promise<T | null> {
+    return this.#storage.getEntityByKeyAndSearch(this.#storageKey, search);
   }
 
   writeOne(user: IUserDto): Promise<void> {
-    return this.#storage.writeByKey<IUserDto>(this.#storageKey, [user]);
+    return this.#storage.writeItemsByKey<IUserDto>(this.#storageKey, [user]);
   }
 
   writeAll(users: IUserDto[]): Promise<void> {
-    return this.#storage.writeByKey<IUserDto>(this.#storageKey, users);
+    return this.#storage.writeItemsByKey<IUserDto>(this.#storageKey, users);
   }
 
   truncateAll(): Promise<void> {
-    return this.#storage.clearAll();
+    return this.#storage.clearAllContent();
   }
 }
 
