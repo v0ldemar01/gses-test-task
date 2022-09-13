@@ -1,5 +1,6 @@
-import { faker } from '@faker-js/faker';
 import { it, describe, expect } from '@jest/globals';
+import { faker } from '@faker-js/faker';
+
 import {
   HttpCode,
   CurrencyApiPath,

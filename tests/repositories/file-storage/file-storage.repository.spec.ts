@@ -49,6 +49,7 @@ describe('FileStorageRepository', () => {
   });
 
   afterEach(() => {
+    jest.clearAllMocks();
     fileContent = JSON.stringify(fileContentData);
   });
 
