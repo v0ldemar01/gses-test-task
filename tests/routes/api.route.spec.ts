@@ -1,13 +1,13 @@
 import { faker } from '@faker-js/faker';
 import { it, describe, expect } from '@jest/globals';
 import {
-  ENV,
   HttpCode,
   CurrencyApiPath,
   ExceptionMessage,
   SubscriptionApiPath,
   UserValidationMessage,
 } from '../../src/common/enums/enums.js';
+import { ENV } from '../../src/configs/configs.js';
 import { buildApp } from '../helpers/helpers.js';
 
 describe('testing api endpoints', () => {
