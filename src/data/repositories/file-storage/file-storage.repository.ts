@@ -15,35 +15,47 @@ class FileStorage {
     return fs.access(this.#filePath, constants.F_OK);
   }
 
-  async getAll<T>(): Promise<T> {
-    this.fileExists();
+  async getAllContent<T>(): Promise<T> {
+    await this.fileExists();
+
     return JSON.parse((await fs.readFile(this.#filePath, 'utf-8')));
   }
 
-  async getByKey<T>(key: string): Promise<T[]> {
-    const data = (await this.getAll<Record<string, T[]>>() as Record<string, T[]>);
+  async getItemsByKey<T>(key: string): Promise<T[]> {
+    const data = (await this.getAllContent<Record<string, T[]>>() as Record<string, T[]>);
 
     return data[key];
   }
 
-  async writeByKey<
+  async getEntityByKeyAndSearch<T>(key: string, search: Partial<T>): Promise<T | null> {
+    const entities = await this.getItemsByKey<T>(key);
+    const currentUser = (entities ?? []).find((entity) => {
+      return Object.entries(search).every(
+        ([searchKey, searchValue]) => entity[searchKey as keyof T] === searchValue,
+      );
+    });
+
+    return currentUser ?? null;
+  }
+
+  async writeItemsByKey<
     T,
   >(key: string, items: T[]): Promise<void> {
-    const data = (await this.getAll<Record<string, T[]>>() as Record<string, T[]>);
-    data[key] = data[key].concat(items);
+    const data = (await this.getAllContent<Record<string, T[]>>() as Record<string, T[]>);
+    data[key] = (data[key] ?? []).concat(items);
     this.writeData(data);
   }
 
-  clearByKey(key: keyof string): Promise<void> {
+  clearItemsByKey(key: string): Promise<void> {
     return this.writeData({ [key]: [] });
   }
 
-  clearAll(): Promise<void> {
+  clearAllContent(): Promise<void> {
     return this.writeData({});
   }
 
   writeData<T>(data: T): Promise<void> {
-    return fs.writeFile(this.#filePath, JSON.stringify(data), { flag: 'a' });
+    return fs.writeFile(this.#filePath, JSON.stringify(data, null, 2));
   }
 }
 

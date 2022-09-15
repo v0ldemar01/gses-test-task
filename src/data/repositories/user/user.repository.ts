@@ -4,7 +4,7 @@ import {
   IUserDto,
   ISubscribeUserDto,
 } from '../../../common/model-types/model-types.js';
-import { FileUserStorage } from '../file-user-storage/file-user-storage.js';
+import { FileUserStorage } from '../file-user-storage/file-user-storage.repository.js';
 
 interface IUserRepositoryConstructor {
   storage: FileUserStorage;
@@ -22,22 +22,11 @@ class User {
   }
 
   getById(id: string): Promise<IUserDto | null> {
-    return this.getOne({ id });
+    return this.#storage.getOne({ id }) as Promise<IUserDto | null>;
   }
 
   getOne(search: Partial<IUserDto>): Promise<IUserDto | null> {
-    return this.findOne(search);
-  }
-
-  async findOne(search: Partial<IUserDto>): Promise<IUserDto | null> {
-    const users = await this.getAll();
-    const currentUser = users.find((user) => {
-      return Object.entries(search).every(
-        ([key, value]) => user[key as keyof IUserDto] === value,
-      );
-    });
-
-    return currentUser ?? null;
+    return this.#storage.getOne(search);
   }
 
   async subscribe({ email }: ISubscribeUserDto): Promise<IUserDto> {
