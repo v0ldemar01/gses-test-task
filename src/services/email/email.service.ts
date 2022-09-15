@@ -3,13 +3,14 @@ import nodemailer, { Transporter } from 'nodemailer';
 import Mail from 'nodemailer/lib/mailer';
 import SMTPTransport from 'nodemailer/lib/smtp-transport';
 
-import { IEmailCredentials } from '../../common/model-types/email/email';
-import { getEmailTransportConfig } from '../../configs/email.config';
+import { IEmailCredentials } from '../../common/model-types/email/email.js';
+import { getEmailTransportConfig } from '../../configs/email.config.js';
 
 interface IEmailServiceConstructor extends IEmailCredentials {}
 
 class Email {
   #transporter: Transporter<SMTPTransport.SentMessageInfo>;
+  #sourceEmail: string;
 
   constructor(credentials: IEmailServiceConstructor) {
     this.#transporter = this._createTransporter(credentials);
