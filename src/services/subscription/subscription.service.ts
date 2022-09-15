@@ -1,5 +1,5 @@
-import { ExceptionMessage, HttpCode } from '../../common/enums/enums.js';
-import { HttpError } from '../../exceptions/exceptions.js';
+import { ExceptionMessage } from '../../common/enums/enums.js';
+import { SubscriptionError } from '../../exceptions/exceptions.js';
 import {
   ISubscribeUserRequestDto,
 } from '../../common/model-types/model-types.js';
@@ -30,8 +30,7 @@ class Subscription {
     const existingUser = await this.#userRepository.getOne({ email });
 
     if (existingUser) {
-      throw new HttpError({
-        status: HttpCode.CONFLICT,
+      throw new SubscriptionError({
         message: ExceptionMessage.USER_ALREADY_EXISTS,
       });
     }

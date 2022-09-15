@@ -13,5 +13,8 @@ export default {
     '^.+\\.ts?$': 'ts-jest',
   },
   modulePaths: [ '<rootDir>' ],
+  moduleNameMapper: {
+    '^(\\.{1,2}/.*)\\.js$': '$1',
+  },
   transformIgnorePatterns: ['/node_modules/'],
 };

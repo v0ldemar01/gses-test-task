@@ -1,7 +1,7 @@
 import { FastifyPluginAsync, FastifyRequest } from 'fastify';
 
 import { ISubscribeUserRequestDto } from '../../common/model-types/model-types.js';
-import { HttpCode, HttpMethod, SubscriptionApiPath } from '../../common/enums/enums.js';
+import { ExceptionName, HttpCode, HttpMethod, SubscriptionApiPath } from '../../common/enums/enums.js';
 import {
   subscribeUser as subscribeUserValidationSchema,
 } from '../../validation-schemas/validation-schemas.js';
@@ -23,9 +23,16 @@ const initSubscriptionApi: FastifyPluginAsync<IInitSubscriptionApiOptions> = asy
       body: subscribeUserValidationSchema,
     },
     handler: async (req: FastifyRequest<{ Body: ISubscribeUserRequestDto }>, rep) => {
-      await subscriptionService.subscribeUser({ email: req.body.email });
+      try {
+        await subscriptionService.subscribeUser({ email: req.body.email });
 
-      return rep.status(HttpCode.OK).send();
+        return rep.status(HttpCode.OK).send();
+      } catch (err) {
+        if ((err as Error).name === ExceptionName.SUBSCRIPTION_ERROR) {
+          return rep.status(HttpCode.CONFLICT).send(err);
+        }
+        return rep.status(HttpCode.BAD_REQUEST).send(err);
+      }
     },
   });
 

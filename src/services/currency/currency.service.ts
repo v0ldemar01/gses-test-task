@@ -1,4 +1,4 @@
-import { ENV } from '../../common/enums/enums.js';
+import { ENV } from '../../configs/configs.js';
 import {
   IGetBTCInUAHFullResponseDto,
   IGetBTCInUAHResponseDto,
