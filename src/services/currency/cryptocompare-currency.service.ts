@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import {
   IGetRateCryptocompareApiResponseDto,
   IGetRateCryptocompareResponseDto,
@@ -12,13 +13,17 @@ class CryptocompareCurrency extends AbstractCurrency {
   }
 
   override async getRate({ from = Currency.BTC, to = Currency.UAH }): Promise<IGetRateCryptocompareResponseDto> {
-    const result = await this.http.load<IGetRateCryptocompareApiResponseDto>(
-      (ENV.CURRENCY.CRYPTOCOMPARE_CURRENCY.URL as string),
-        { params: this.#getCurrencyPairConfig({ from, to }) },
-    );
-    const amount = result[to];
+    try {
+      const result = await this.http.load<IGetRateCryptocompareApiResponseDto>(
+        (ENV.CURRENCY.CRYPTOCOMPARE_CURRENCY.URL as string),
+          { params: this.#getCurrencyPairConfig({ from, to }) },
+      );
+      const amount = result[to];
 
-    return amount;
+      return amount;
+    } catch (err) {
+      return super.getRate({ from, to });
+    }
   }
 }
 

@@ -1,4 +1,4 @@
-type IGetRateAbstractResponseDto = number;
+type IGetRateAbstractResponseDto = number | void;
 
 export {
   type IGetRateAbstractResponseDto,

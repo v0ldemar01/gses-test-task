@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import {
   IGetRateCoinbaseResponseDto,
   IGetRateCoinbaseApiResponseDto,
@@ -14,15 +15,19 @@ class BinanceCurrency extends AbstractCurrency {
   }
 
   override async getRate({ from = Currency.BTC, to = Currency.UAH }): Promise<IGetRateCoinbaseResponseDto> {
-    const result = await this.http.load<IGetRateCoinbaseApiResponseDto>(
-      (ENV.CURRENCY.BINANCE_CURRENCY.URL as string),
-        {
-          params: this.#getCurrencyPairConfig({ from, to }),
-        },
-    );
-    const { data: { amount } } = result;
+    try {
+      const result = await this.http.load<IGetRateCoinbaseApiResponseDto>(
+        (ENV.CURRENCY.BINANCE_CURRENCY.URL as string),
+          {
+            params: this.#getCurrencyPairConfig({ from, to }),
+          },
+      );
+      const { data: { amount } } = result;
 
-    return amount;
+      return amount;
+    } catch (err) {
+      return super.getRate({ from, to });
+    }
   }
 }
 
