@@ -2,18 +2,18 @@ import { IUserDto } from '~/common/model-types/model-types.js';
 import { FileStorage } from '../file-storage/file-storage.repository.js';
 
 interface IFileEmailStorageConstructor {
-  storage: FileStorage;
+  storage: FileStorage<IUserDto>;
 }
 
 class FileUserStorage {
-  #storage: FileStorage;
+  #storage: FileStorage<IUserDto>;
   #storageKey = 'users';
 
   constructor({ storage }: IFileEmailStorageConstructor) {
     this.#storage = storage;
   }
 
-  get storage(): FileStorage {
+  get storage(): FileStorage<IUserDto> {
     return this.#storage;
   }
 
@@ -22,19 +22,19 @@ class FileUserStorage {
   }
 
   getAll(): Promise<IUserDto[]> {
-    return this.#storage.getItemsByKey<IUserDto>(this.#storageKey);
+    return this.#storage.getItemsByKey(this.#storageKey);
   }
 
-  getOne<T>(search: Partial<T>): Promise<T | null> {
+  getOne(search: Partial<IUserDto>): Promise<IUserDto | null> {
     return this.#storage.getEntityByKeyAndSearch(this.#storageKey, search);
   }
 
   writeOne(user: IUserDto): Promise<void> {
-    return this.#storage.writeItemsByKey<IUserDto>(this.#storageKey, [user]);
+    return this.#storage.writeItemsByKey(this.#storageKey, [user]);
   }
 
   writeAll(users: IUserDto[]): Promise<void> {
-    return this.#storage.writeItemsByKey<IUserDto>(this.#storageKey, users);
+    return this.#storage.writeItemsByKey(this.#storageKey, users);
   }
 
   truncateAll(): Promise<void> {
