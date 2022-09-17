@@ -6,7 +6,7 @@ import { CryptocompareCurrency } from './cryptocompare-currency.service.js';
 import { getCurrencyServiceByProvider } from './helpers/helpers.js';
 import { AbstractCurrency } from './abstract-currency.service.js';
 import { LoggingCurrency } from './logging-currency.service.js';
-import { ProxyCurrency } from './proxy-currency.service.js';
+import { CachingCurrency } from './caching-currency.service.js';
 
 const initCurrencyServices = ({
   http,
@@ -35,13 +35,13 @@ const initCurrencyServices = ({
     cryptocompareCurrency,
   }, provider);
 
-  const proxyCurrency = new ProxyCurrency({
+  const cachingCurrency = new CachingCurrency({
     currencyService: currentCurrency,
     cachingTime,
   });
 
   const loggingCurrency = new LoggingCurrency({
-    currencyService: proxyCurrency,
+    currencyService: cachingCurrency,
   });
 
   return loggingCurrency;

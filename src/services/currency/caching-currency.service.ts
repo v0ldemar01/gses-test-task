@@ -5,18 +5,18 @@ import { Currency } from '../../common/enums/enums.js';
 import { getDateDiff } from '../../helpers/helpers.js';
 import { AbstractCurrency } from './abstract-currency.service.js';
 
-interface IProxyCurrencyConstructor {
+interface ICachingCurrencyConstructor {
   currencyService: AbstractCurrency;
   cachingTime: number;
 }
 
-class ProxyCurrency extends AbstractCurrency {
+class CachingCurrency extends AbstractCurrency {
   #currencyService: AbstractCurrency;
   #cachedCurrencyRate: number | null = null;
   #cachingTime: number;
   #lastUpdate: Date | null = null;
 
-  constructor({ currencyService, cachingTime }: IProxyCurrencyConstructor) {
+  constructor({ currencyService, cachingTime }: ICachingCurrencyConstructor) {
     super({ http: currencyService.http });
     this.#currencyService = currencyService;
     this.#cachingTime = cachingTime;
@@ -49,4 +49,4 @@ class ProxyCurrency extends AbstractCurrency {
   }
 }
 
-export { ProxyCurrency };
+export { CachingCurrency };
