@@ -33,7 +33,7 @@ class ProxyCurrency extends AbstractCurrency {
     return false;
   }
 
-  async getRate({ from = Currency.BTC, to = Currency.UAH }): Promise<IGetRateAbstractResponseDto> {
+  override async getRate({ from = Currency.BTC, to = Currency.UAH }): Promise<IGetRateAbstractResponseDto> {
     if (this.#checkExpiredCache) {
       return this.#cachedCurrencyRate as number;
     }

@@ -5,6 +5,7 @@ import { CoinbaseCurrency } from './coinbase-currency.service.js';
 import { CryptocompareCurrency } from './cryptocompare-currency.service.js';
 import { getCurrencyServiceByProvider } from './helpers/helpers.js';
 import { AbstractCurrency } from './abstract-currency.service.js';
+import { LoggingCurrency } from './logging-currency.service.js';
 import { ProxyCurrency } from './proxy-currency.service.js';
 
 const initCurrencyServices = ({
@@ -28,18 +29,22 @@ const initCurrencyServices = ({
     http,
   });
 
-  const currentCurrencyService = getCurrencyServiceByProvider({
+  const currentCurrency = getCurrencyServiceByProvider({
     binanceCurrency,
     coinbaseCurrency,
     cryptocompareCurrency,
   }, provider);
 
-  const proxyCurrencyService = new ProxyCurrency({
-    currencyService: currentCurrencyService,
+  const proxyCurrency = new ProxyCurrency({
+    currencyService: currentCurrency,
     cachingTime,
   });
 
-  return proxyCurrencyService;
+  const loggingCurrency = new LoggingCurrency({
+    currencyService: proxyCurrency,
+  });
+
+  return loggingCurrency;
 };
 
 export { initCurrencyServices };
