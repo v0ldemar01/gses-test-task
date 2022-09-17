@@ -1,29 +1,37 @@
-import { ENV } from '../../configs/configs.js';
-import {
-  IGetBTCInUAHFullResponseDto,
-  IGetBTCInUAHResponseDto,
-} from '../../common/model-types/model-types.js';
-import { Http as HttpServive } from '../../services/services.js';
+import { CurrencyProvider } from '../../common/enums/enums.js';
+import { Http as HttpService } from '../http/http.service.js';
+import { BinanceCurrency } from './binance-currency.service.js';
+import { CoinbaseCurrency } from './coinbase-currency.service.js';
+import { CryptocompareCurrency } from './cryptocompare-currency.service.js';
+import { CurrencyServices } from './types.js';
+import { getCurrencyServiceByProvider } from './helpers/helpers.js';
 
-interface ICurrencyServiceConstructor {
-  http: HttpServive;
-}
+const initCurrencyServices = ({
+  http,
+  provider,
+}: {
+  http: HttpService;
+  provider: CurrencyProvider;
+}): CurrencyServices[keyof CurrencyServices] => {
+  const binanceCurrency = new BinanceCurrency({
+    http,
+  });
 
-class Currency {
-  #http: HttpServive;
+  const coinbaseCurrency = new CoinbaseCurrency({
+    http,
+  });
 
-  constructor({ http }: ICurrencyServiceConstructor) {
-    this.#http = http;
-  }
+  const cryptocompareCurrency = new CryptocompareCurrency({
+    http,
+  });
 
-  async getBTCInUAH(): Promise<IGetBTCInUAHResponseDto> {
-    const result = await this.#http.load<IGetBTCInUAHFullResponseDto>(
-      ENV.CURRENCY.CURRENCY_RATE_API_URL as string,
-    );
-    const { price: { uah } } = result.data[0];
+  const currentService = getCurrencyServiceByProvider({
+    binanceCurrency,
+    coinbaseCurrency,
+    cryptocompareCurrency,
+  }, provider);
 
-    return uah;
-  }
-}
+  return currentService;
+};
 
-export { Currency };
+export { initCurrencyServices };
