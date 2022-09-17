@@ -5,6 +5,7 @@ config();
 const {
   PORT,
   HOST,
+  CACHING_TIME,
   EMAIL_USERNAME,
   EMAIL_PASSWORD,
   BINANCE_CURRENCY_URL,
@@ -34,6 +35,9 @@ const ENV = {
       URL: CRYPTOCOMPARE_CURRENCY_URL,
     },
     CRYPTO_CURRENCY_PROVIDER,
+    PROXY: {
+      CACHING_TIME: Number(CACHING_TIME),
+    },
   },
   EMAIL: {
     HOST: 'mail.binary-studio.com',

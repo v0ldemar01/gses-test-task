@@ -3,7 +3,7 @@ import {
   IGetRateCoinbaseResponseDto,
   IGetRateCoinbaseApiResponseDto,
 } from '../../common/model-types/model-types.js';
-import { Currency } from '~/common/enums/enums.js';
+import { Currency } from '../../common/enums/enums.js';
 import { ENV } from '../../configs/configs.js';
 import { AbstractCurrency } from './abstract-currency.service.js';
 
